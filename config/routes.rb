@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  post '/event', to: 'payload#github_event'
+  resources module: 'api' do
+    resources module: 'v1' do
+      post '/event', to: 'payload#github_event'
+    end
+  end
 end
