@@ -2,12 +2,12 @@ module Api
   module V1
     class PayloadController < ApplicationController
 
-      def github_event
+      def create
         if params[:issue].nil?
-          render nothing: true, status: 404, json: { status: 404, data: 'Not Fount' }
+          render nothing: true, status: 404, json: { status: 404, data: 'Not Found' }
         else
           result = format_github_issue_event
-          render json: { data: result, status: 201 }
+          render status: 201, json: { data: result, status: 201 }
         end
       end
 

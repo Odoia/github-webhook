@@ -1,5 +1,6 @@
 require 'rails_helper'
-describe PayloadController, type: :controller do
+
+describe ::Api::V1::PayloadController, type: :controller do
 
   before do
     execute_actions
@@ -34,7 +35,7 @@ describe PayloadController, type: :controller do
   context 'When need register a github payload' do
     context'When use payload with status open with comments' do
       let(:execute_actions) do
-        post :github_event, params: json_status_open_with_comments
+        post :create, params: json_status_open_with_comments
       end
 
       context 'when create a new issue' do
@@ -90,7 +91,7 @@ describe PayloadController, type: :controller do
 
     context'When use payload with status open without comments' do
       let(:execute_actions) do
-        post :github_event, params: json_status_open_without_comments
+        post :create, params: json_status_open_without_comments
       end
 
       context 'when create a new issue' do
@@ -114,7 +115,7 @@ describe PayloadController, type: :controller do
 
     context'When use payload with status closed without comments' do
       let(:execute_actions) do
-        post :github_event, params: json_status_closed_without_comments
+        post :create, params: json_status_closed_without_comments
       end
 
       context 'when create a new issue' do
@@ -142,7 +143,7 @@ describe PayloadController, type: :controller do
 
     context'When use payload with status closed with comments' do
       let(:execute_actions) do
-        post :github_event, params: json_status_closed_with_comments
+        post :create, params: json_status_closed_with_comments
       end
 
       context 'when create a new issue' do
@@ -170,8 +171,8 @@ describe PayloadController, type: :controller do
 
     context'When use payload with status open and closed without comments' do
       let(:execute_actions) do
-        post :github_event, params: json_status_open_without_comments
-        post :github_event, params: json_status_closed_without_comments
+        post :create, params: json_status_open_without_comments
+        post :create, params: json_status_closed_without_comments
       end
 
       context 'when create a new issue' do
