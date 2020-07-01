@@ -27,36 +27,48 @@ describe ::Api::V1::IssueController, type: :controller do
     end
   end
 
-  let(:make_commentt) do
-    ::Comment.new({
-      comment:  'comment',
-      sender:    'owner',
-      issue_id: 616
-    }).save
-  end
-
   let(:make_comment) do
-    x = 0
-    while x < 10 do
     ::Comment.new({
-      comment:  'comment',
+      title:  'comment title',
+      event_type:  'comment',
       sender:    'owner',
       issue_id: ::Issue.first.id
     }).save
-    x += 1
+  end
+
+  let(:make_10_comments) do
+    x = 0
+    while x < 10 do
+      ::Comment.new({
+        title:  'comment title',
+        event_type:  'comment',
+        sender:    'owner',
+        issue_id: ::Issue.first.id
+      }).save
+      x += 1
     end
   end
 
   let(:make_status) do
-    x = 0
-    while x < 10 do
     ::Status.new({
-      status:  'open',
+      title:  'open',
+      event_type:  'status',
       sender:    'owner',
       issue_id: ::Issue.first.id
     }).save
-    x += 1
   end
+
+  let(:make_10_status) do
+    x = 0
+    while x < 10 do
+      ::Status.new({
+        title:  'open',
+        event_type:  'status',
+        sender:    'owner',
+        issue_id: ::Issue.first.id
+      }).save
+      x += 1
+    end
   end
 
   context 'When given a 10 issues' do
@@ -65,7 +77,7 @@ describe ::Api::V1::IssueController, type: :controller do
       let(:execute_actions) do
         make_10_issues
         make_comment
-        make_commentt
+        make_10_comments
         make_status
         get :index
       end
@@ -76,13 +88,13 @@ describe ::Api::V1::IssueController, type: :controller do
 
       it "first title of issue must be 'title_0'" do
         body = JSON.parse response.body
-        expect(body['data'].first['title']).to eq('title_0')
+        expect(body['data'].first['issue']['title']).to eq('title_0')
       end
 
-      it "first data must be 'issue' and 'comment'" do
+      it "first data must be 'issue' and 'events'" do
         body = JSON.parse response.body
         expect(body['data'].first).to include('issue')
-        expect(body['data'].first).to include('comment')
+        expect(body['data'].first['issue']).to include('events')
       end
 
       it 'count must return 10' do
@@ -91,14 +103,30 @@ describe ::Api::V1::IssueController, type: :controller do
       end
 
       context 'When issue has a one comment' do
-        it 'count must return 1'do 
-          expect(Comment.count).to eq 1
+        let(:execute_actions) do
+          make_10_issues
+          make_status
+          make_comment
+          get :show, { format: :json, params: { id: ::Issue.first.issue_id }}
         end
-      end
 
-        xcontext 'When issue has one status' do
-        it 'count must return 1' do
-          expect(Status.count).to eq 1
+        it 'http status must be 200' do
+          expect(response.status).to eq 200
+        end
+
+        it 'count must return 1'do 
+          body = JSON.parse response.body
+          expect(body['data'].count).to eq 1
+        end
+
+        it 'first event_type must be status'do 
+          body = JSON.parse response.body
+          expect(body['data']['issue']['events'].first['event_type']).to eq 'status'
+        end
+
+        it 'second event_type must be comment'do 
+          body = JSON.parse response.body
+          expect(body['data']['issue']['events'].second['event_type']).to eq 'comment'
         end
       end
     end

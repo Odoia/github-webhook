@@ -4,7 +4,7 @@ module Api
 
       def index
         result = all_issues
-        if result
+        unless result.nil?
           render status: 200, json: { data: result, status: 200 }
         else
           render nothing: true, status: 404, json: { status: 404, data: 'Not Found' }
