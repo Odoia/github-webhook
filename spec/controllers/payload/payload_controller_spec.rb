@@ -69,12 +69,12 @@ describe ::Api::V1::PayloadController, type: :controller do
           expect(Status.count).to eq 1
         end
 
-        it "'open' must be status" do
-          expect(Status.first.status).to eq 'open'
+        it "'open' must be status title" do
+          expect(Status.first.title).to eq 'open'
         end
 
-        it "'646919119' must be issue_id" do
-          expect(Status.first.issue_id).to eq 646919119
+        it "issue_id must be equal a last issue.id" do
+          expect(Status.first.issue_id).to eq ::Issue.last.id
         end
       end
 
@@ -83,12 +83,16 @@ describe ::Api::V1::PayloadController, type: :controller do
           expect(Comment.count).to eq 1
         end
 
-        it "'rspec comment' must be comment" do
-          expect(Comment.first.comment).to eq 'rspec comment'
+        it "'rspec comment' must be title" do
+          expect(Comment.first.title).to eq 'rspec comment'
         end
 
         it "'Rspec' must be owner" do
-          expect(Comment.first.owner).to eq 'Rspec'
+          expect(Comment.first.sender).to eq 'Rspec'
+        end
+
+        it "issue_id must be equal a last issue.id" do
+          expect(Comment.first.issue_id).to eq ::Issue.last.id
         end
       end
     end
@@ -133,8 +137,8 @@ describe ::Api::V1::PayloadController, type: :controller do
           expect(Status.count).to eq 1
         end
 
-        it "'closed' must be status" do
-          expect(Status.first.status).to eq 'closed'
+        it "'closed' must be status title" do
+          expect(Status.first.title).to eq 'closed'
         end
       end
 
@@ -161,8 +165,8 @@ describe ::Api::V1::PayloadController, type: :controller do
           expect(Status.count).to eq 1
         end
 
-        it "'closed' must be status" do
-          expect(Status.first.status).to eq 'closed'
+        it "'closed' must be status title" do
+          expect(Status.first.title).to eq 'closed'
         end
       end
 
@@ -197,9 +201,9 @@ describe ::Api::V1::PayloadController, type: :controller do
             expect(Status.count).to eq 2
           end
 
-          it 'open and closed must be cocontain on status' do
-            expect(Status.first.status).to eq 'open'
-            expect(Status.second.status).to eq 'closed'
+          it 'open and closed must be cocontain on status title' do
+            expect(Status.first.title).to eq 'open'
+            expect(Status.second.title).to eq 'closed'
           end
         end
       end

@@ -35,7 +35,7 @@ module Services
         end
 
         def find_status
-          @state ||= ::Status.find_by(title: status, issue_id: issue.id, sender: sender) if issue.last_status.title == status
+          @state ||= ::Status.find_by(title: status, issue_id: issue.id, sender: sender) if issue.last_status&.title == status
         end
       end
     end
