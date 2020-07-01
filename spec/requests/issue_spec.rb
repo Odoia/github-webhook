@@ -1,18 +1,22 @@
 require 'rails_helper'
 
-describe ::Api::V1::IssueController, type: :controller do
+describe '::Api::V1::IssueController', type: :request do
 
   before do
     execute_actions
   end
+
+  let(:execute_actions) {}
+
+  let(:user) { FactoryBot.create(:user) }
+
+  let(:token) { AuthenticateUser.call(user.email, user.password) }
 
   let(:json_status_open_with_comments) do
     path  = File.expand_path("payload_open_with_comment.json", 'spec/helpers/')
     file  = File.read(path)
     JSON.parse(file)
   end
-
-  let(:execute_actions) {}
 
   let(:make_10_issues) do
     x = 0
@@ -79,7 +83,7 @@ describe ::Api::V1::IssueController, type: :controller do
         make_comment
         make_10_comments
         make_status
-        get :index
+        get '/api/v1/issue', params: {}, headers: { 'ACCEPT' => 'application/json', :Authorization => "bearer #{token.result}" }
       end
 
       it 'http status must be 200' do
@@ -107,7 +111,7 @@ describe ::Api::V1::IssueController, type: :controller do
           make_10_issues
           make_status
           make_comment
-          get :show, { format: :json, params: { id: ::Issue.first.issue_id }}
+          get "/api/v1/issue/#{::Issue.first.issue_id}", params: { }, headers: { 'ACCEPT' => 'application/json', :Authorization => "bearer #{token.result}" }
         end
 
         it 'http status must be 200' do

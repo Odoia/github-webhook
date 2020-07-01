@@ -14,8 +14,11 @@ gem 'puma', '~> 4.1'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
+# For token jwt
+gem 'jwt'
 
+gem 'simple_command'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
@@ -31,6 +34,7 @@ group :development, :test do
   gem 'pry'
   gem 'rspec-rails'
   gem 'rubocop'
+  gem 'factory_bot_rails'
 end
 
 group :development do

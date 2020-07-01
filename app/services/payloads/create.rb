@@ -19,22 +19,22 @@ module Services
 
       def make_payload
         ActiveRecord::Base.transaction do
-          create_issue
-          create_status
-          create_comment if comment
+          created_issue = create_issue
+          create_status(created_issue)
+          create_comment(created_issue) if comment
         end
       end
 
       def create_issue
-        @issue = ::Services::Payloads::Issue::Create.new(issue: issue).call
+        ::Services::Payloads::Issue::Create.new(issue: issue).call
       end
 
-      def create_comment
-        @comment = ::Services::Payloads::Comment::Create.new(comment: comment, issue_id: issue.id).call
+      def create_comment(created_issue)
+        ::Services::Payloads::Comment::Create.new(comment: comment, issue_id: created_issue.id).call
       end
 
-      def create_status
-        @status = ::Services::Payloads::Status::Create.new(status: status, sender: sender, issue: issue).call
+      def create_status(created_issue)
+        ::Services::Payloads::Status::Create.new(status: status, sender: sender, issue: created_issue).call
       end
     end
   end
