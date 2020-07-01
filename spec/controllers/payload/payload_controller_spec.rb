@@ -39,6 +39,10 @@ describe ::Api::V1::PayloadController, type: :controller do
       end
 
       context 'when create a new issue' do
+        it 'http status must be 201' do
+          expect(response.status).to eq 201
+        end
+
         it 'count must return 1' do
           expect(Issue.count).to eq 1
         end

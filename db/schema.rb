@@ -16,8 +16,9 @@ ActiveRecord::Schema.define(version: 2020_06_27_215010) do
   enable_extension "plpgsql"
 
   create_table "comments", force: :cascade do |t|
-    t.string "comment"
-    t.string "owner"
+    t.string "title"
+    t.string "event_type"
+    t.string "sender"
     t.bigint "issue_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -34,7 +35,9 @@ ActiveRecord::Schema.define(version: 2020_06_27_215010) do
   end
 
   create_table "statuses", force: :cascade do |t|
-    t.string "status"
+    t.string "title"
+    t.string "event_type"
+    t.string "sender"
     t.bigint "issue_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

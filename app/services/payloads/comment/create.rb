@@ -5,7 +5,7 @@ module Services
 
         def initialize(comment:, issue_id:)
           @comment  = comment[:body]
-          @owner    = comment[:user][:login]
+          @sender   = comment[:user][:login]
           @issue_id = issue_id
         end
 
@@ -15,7 +15,7 @@ module Services
 
         private
 
-        attr_reader :comment, :owner, :issue_id
+        attr_reader :comment, :sender, :issue_id
 
         def make_comment
           comment = ::Comment.new(params_to_save)
@@ -25,8 +25,9 @@ module Services
 
         def params_to_save
           {
-            comment:  comment,
-            owner:    owner,
+            title:  comment,
+            event_type: 'comment',
+            sender:    sender,
             issue_id: issue_id
           }
         end

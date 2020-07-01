@@ -6,6 +6,7 @@ module Services
         @issue   = all_params[:issue]
         @comment = all_params[:comment]
         @status  = issue[:state]
+        @sender  = all_params[:sender][:login]
       end
 
       def call
@@ -14,13 +15,13 @@ module Services
 
       private
 
-      attr_reader :issue, :comment, :status
+      attr_reader :issue, :comment, :status, :sender
 
       def make_payload
         ActiveRecord::Base.transaction do
           create_issue
-          create_comment if comment
           create_status
+          create_comment if comment
         end
       end
 
@@ -29,11 +30,11 @@ module Services
       end
 
       def create_comment
-        @comment = ::Services::Payloads::Comment::Create.new(comment: comment, issue_id: issue.issue_id).call
+        @comment = ::Services::Payloads::Comment::Create.new(comment: comment, issue_id: issue.id).call
       end
 
       def create_status
-        @status = ::Services::Payloads::Status::Create.new(status: status, issue_id: issue.issue_id).call
+        @status = ::Services::Payloads::Status::Create.new(status: status, sender: sender, issue: issue).call
       end
     end
   end

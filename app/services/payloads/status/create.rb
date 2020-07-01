@@ -3,9 +3,10 @@ module Services
     module Status
       class Create
 
-        def initialize(status:, issue_id:)
-          @status  = status
-          @issue_id = issue_id
+        def initialize(status:, issue:, sender:)
+          @status   = status
+          @sender   = sender
+          @issue    = issue
         end
 
         def call
@@ -14,7 +15,7 @@ module Services
 
         private
 
-        attr_reader :status, :issue_id, :state
+        attr_reader :status, :issue, :sender, :state
 
         def make_status
           return state if find_status
@@ -26,13 +27,15 @@ module Services
 
         def params_to_save
           {
-            status:   status,
-            issue_id: issue_id
+            title:      status,
+            event_type: 'status',
+            sender:     sender,
+            issue_id:   issue.id
           }
         end
 
         def find_status
-          @state ||= ::Status.find_by(status: status, issue_id: issue_id)
+          @state ||= ::Status.find_by(title: status, issue_id: issue.id, sender: sender) if issue.last_status.title == status
         end
       end
     end
