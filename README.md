@@ -15,7 +15,7 @@ Clone this project and run those commands in sequence:
 
 # API documentation
 
-[API mind map](http://www.xmind.net/m/nW3WDE)
+[API mind map](http://www.xmind.net/m/FRtEpE)
 
 # How it works
 
