@@ -7,7 +7,7 @@ It uses Ruby 2.7.1, Rails 6 and it is needed Postgres 12.
 
 Clone this project and run those commands in sequence:
 
-* Rbundle install
+* bundle install
 * rails db:create
 * rails db:migrate
 * rails db:seed 
