@@ -4,7 +4,7 @@ module Api
 
       def create
         if params[:issue].nil?
-          render nothing: true, status: 404, json: { status: 404, data: 'Not Found' }
+          render nothing: true, status: 400, json: { status: 400, data: 'Bad Request' }
         else
           result = format_github_issue_event
           render status: 201, json: { data: result, status: 201 }
